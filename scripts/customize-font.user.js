@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Customize Font on Mozilla Firefox
 // @namespace    BTGS:Font
-// @version      0.2
+// @version      0.3
 // @description  Customizes website font to OpenSans as the default san-serif font and SauceCodePro Nerd Font as the monospace font.
 // @author       bhanutejags
 // @match        https://*/*
@@ -17,7 +17,7 @@ GM_addStyle ( `
         font-family: 'Open Sans', sans-serif !important;
     }
 
-    pre, code, .highlight, .code, .highlighttable, .blob-code, .blob-code-marker, .blob-code-inner {
+    pre, code, .highlight, .code, .blob-code, .blob-code-marker, .blob-code-inner {
       font-family: 'SauceCodePro Nerd Font', monospace !important;
     }
 ` );
