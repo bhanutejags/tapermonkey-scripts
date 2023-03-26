@@ -19,7 +19,7 @@ GM_addStyle ( `
         font-family: 'Open Sans', sans-serif !important;
     }
 
-    pre, code, .highlight, .code, .highlighttable {
+    pre, code, .highlight, .code, .highlighttable, .blob-code, .blob-code-marker, .blob-code-inner {
       font-family: 'SauceCodePro Nerd Font', monospace !important;
     }
 ` );
