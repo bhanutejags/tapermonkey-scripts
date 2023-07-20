@@ -17,7 +17,7 @@ GM_addStyle ( `
         font-family: 'Open Sans', sans-serif !important;
     }
 
-    pre, code, .highlight, .code, .blob-code, .blob-code-marker, .blob-code-inner, .react-blob-print-hide {
-      font-family: 'SauceCodePro Nerd Font', monospace !important;
+    pre, code, .highlight, .code, .blob-code, .blob-code-content, .blob-code-marker, .blob-code-inner, .react-blob-print-hide, textbox, textarea, [class^="Box"], read-only-cursor-text-area {
+      font-family: 'SauceCodePro Nerd Font' monospace !important;
     }
 ` );
