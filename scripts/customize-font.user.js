@@ -18,6 +18,6 @@ GM_addStyle ( `
     }
 
     pre, code, .highlight, .code, .blob-code, .blob-code-content, .blob-code-marker, .blob-code-inner, .react-blob-print-hide, .react-code-text, .cm-editor, textbox, textarea, [class^="Box"], read-only-cursor-text-area {
-      font-family: 'SauceCodePro Nerd Font', monospace !important;
+      font-family: 'SauceCodePro NF', monospace !important;
     }
 ` );
