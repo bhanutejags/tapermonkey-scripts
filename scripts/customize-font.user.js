@@ -13,9 +13,13 @@
 // @grant        GM_addStyle
 // ==/UserScript==
 GM_addStyle ( `
-    body {
+    html {
         font-family: 'Ubuntu Nerd Font', sans-serif !important;
     }
+
+    body {
+        font-family: 'Ubuntu Nerd Font', sans-serif !important;
+    }s
 
     pre, code, .highlight, .code, .blob-code, .blob-code-content, .blob-code-marker, .blob-code-inner, .react-blob-print-hide, .react-code-text, .cm-editor, textbox, textarea, [class^="Box"], read-only-cursor-text-area {
       font-family: 'SauceCodePro Nerd Font', monospace !important;
