@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Customize Website Fonts
 // @namespace    BTGS:Font
-// @version      0.4
+// @version      0.5
 // @description  Customizes website fonts to Ubuntu Nerd Font as the default sans-serif font and UbuntuMono Nerd Font as the monospace font.
 // @author       bhanutejags
 // @match        https://*/*
@@ -85,19 +85,36 @@ GM_addStyle(`
     }
 
     /* Apply monospace font to code and technical elements */
-    pre, code, kbd, samp, tt, var,
-    .highlight, .code, .Code, .CODE,
-    [class*="code"], [class*="Code"], [class*="CODE"],
-    [class*="mono"], [class*="Mono"], [class*="MONO"],
-    [class*="highlight"], [class*="Highlight"],
-    [class*="source"], [class*="Source"],
+    /* IMPORTANT: This must come AFTER the universal selector to override it */
+    pre, pre *, code, code *, kbd, kbd *, samp, samp *, tt, tt *, var, var *,
+    .highlight, .highlight *, .code, .code *, .Code, .Code *, .CODE, .CODE *,
+    [class*="code"], [class*="code"] *,
+    [class*="Code"], [class*="Code"] *,
+    [class*="CODE"], [class*="CODE"] *,
+    [class*="mono"], [class*="mono"] *,
+    [class*="Mono"], [class*="Mono"] *,
+    [class*="MONO"], [class*="MONO"] *,
+    [class*="highlight"], [class*="highlight"] *,
+    [class*="Highlight"], [class*="Highlight"] *,
+    [class*="source"], [class*="source"] *,
+    [class*="Source"], [class*="Source"] *,
     /* GitHub-specific selectors */
-    .blob-code, .blob-code-content, .blob-code-marker, .blob-code-inner,
-    .react-blob-print-hide, .react-code-text,
+    .blob-code, .blob-code *,
+    .blob-code-content, .blob-code-content *,
+    .blob-code-marker, .blob-code-marker *,
+    .blob-code-inner, .blob-code-inner *,
+    .react-blob-print-hide, .react-blob-print-hide *,
+    .react-code-text, .react-code-text *,
+    .react-code-line-contents, .react-code-line-contents *,
+    .react-code-line-contents-no-virtualization, .react-code-line-contents-no-virtualization *,
+    .react-file-line, .react-file-line *,
     /* Editor-specific selectors */
-    .cm-editor, .CodeMirror, [class*="editor"],
+    .cm-editor, .cm-editor *,
+    .CodeMirror, .CodeMirror *,
+    [class*="editor"], [class*="editor"] *,
     /* Terminal-like elements */
-    [class*="terminal"], [class*="console"] {
+    [class*="terminal"], [class*="terminal"] *,
+    [class*="console"], [class*="console"] * {
         font-family: var(--custom-mono-font) !important;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
