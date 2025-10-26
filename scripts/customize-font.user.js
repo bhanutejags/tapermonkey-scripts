@@ -6,6 +6,7 @@
 // @author       bhanutejags
 // @match        https://*/*
 // @exclude      *.google.com/*
+// @exclude      *.google.dev/*
 // @exclude      *.youtube.com/*
 // @exclude      *.gov/*
 // @exclude      *.*.gov/*
