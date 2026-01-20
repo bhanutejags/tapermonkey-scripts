@@ -50,7 +50,7 @@
 // @exclude      *equifax.com/*
 // @exclude      *ballard.amazon.com/*
 // @exclude      *amazon.dev/*
-// @exclude      oncall.corp.amazon.com/*
+// @exclude      *oncall.corp.amazon.com/*
 // @exclude      *lhh.com/*
 // @exclude      *kaggle.com/*
 // @exclude      *quip-amazon.com/*
