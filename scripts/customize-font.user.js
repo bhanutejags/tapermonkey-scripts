@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Customize Website Fonts
 // @namespace    BTGS:Font
-// @version      1.0
+// @version      1.1
 // @description  Customizes website fonts to Ubuntu Nerd Font as the default sans-serif font and UbuntuMono Nerd Font as the monospace font.
 // @author       bhanutejags
 // @match        https://*/*
@@ -94,8 +94,17 @@ GM_addStyle(`
      * so the only reliable fix is to never override it in the first place.
      * The :not() chain is wrapped in :where() so it contributes ZERO
      * specificity -- the rule stays at (0,0,0) like a bare '*', which keeps
-     * the monospace block below winning the cascade. */
-    *:where(:not([class*="icon" i]):not([class*="material-symbols"]):not([data-icon]):not(.fa):not(.fas):not(.far):not(.fal):not(.fad):not(.fab):not(.fa-solid):not(.fa-regular):not(.fa-light):not(.fa-thin):not(.fa-brands):not(.fa-duotone):not([class*="fa-"]):not(.bi):not([class^="bi-"]):not([class*=" bi-"]):not(.lucide):not([class*="lucide"]):not(.feather):not([class*="feather"]):not(.glyphicon):not(.anticon):not(.ionicon)) {
+     * the monospace block below winning the cascade.
+     *
+     * Many icon fonts have no "icon" class -- they set the font inline on a
+     * generic <span> (e.g. Claude's design system: <span data-cds="Icon"
+     * style="font-family: var(--font-anthropicons, Anthropicons-Variable)">).
+     * Our '!important' beats their non-important inline style, so we must
+     * exclude them by their stable attribute (data-cds="Icon") and by the
+     * font name appearing in the inline style as a backstop. Note: a Nerd
+     * Font has its OWN glyphs in the same Private-Use codepoints, so the icon
+     * renders as the WRONG glyph rather than blank -- easy to miss. */
+    *:where(:not([class*="icon" i]):not([class*="material-symbols"]):not([data-icon]):not([data-cds="Icon"]):not([style*="Anthropicons" i]):not([style*="font-anthropicons" i]):not(.fa):not(.fas):not(.far):not(.fal):not(.fad):not(.fab):not(.fa-solid):not(.fa-regular):not(.fa-light):not(.fa-thin):not(.fa-brands):not(.fa-duotone):not([class*="fa-"]):not(.bi):not([class^="bi-"]):not([class*=" bi-"]):not(.lucide):not([class*="lucide"]):not(.feather):not([class*="feather"]):not(.glyphicon):not(.anticon):not(.ionicon)) {
         font-family: var(--custom-sans-font) !important;
     }
 
