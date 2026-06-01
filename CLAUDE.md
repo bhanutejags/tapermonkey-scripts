@@ -70,6 +70,25 @@ the font script:
 
 Always bump `@version` and re-run the harness after edits.
 
+## Modern JavaScript Syntax (Optional Build Toolchain)
+
+The current scripts are single-file `GM_addStyle()` CSS injectors with no JS logic, so they
+ship as-is with **no build step**. If a script ever grows real DOM/JS logic and needs modern
+syntax (TypeScript, ES modules, JSX/components, CSS Modules), Violentmonkey supports a build
+toolchain instead of hand-writing a single `.user.js`:
+
+- Scaffold with their Yeoman generator:
+  `npx -p github:violentmonkey/generator-userscript -p yo yo @violentmonkey/userscript`
+- It sets up Babel + Rollup, with optional TypeScript, CSS Modules, UnoCSS, and SolidJS
+  (remove the plugins you don't want — they're all optional).
+- Source lives in `src/` (`meta.js` for the metadata block, `index.ts` entry point); `npm run
+dev` watches and `npm run build` compiles to a single `dist/index.user.js` for install.
+- Version/author auto-sync from `package.json`.
+- Guide: https://violentmonkey.github.io/guide/using-modern-syntax/
+
+Only adopt this when a script's complexity justifies it; keep simple CSS-injection scripts
+build-less.
+
 ## API Reference
 
 - Violentmonkey API: https://violentmonkey.github.io/api/gm/
