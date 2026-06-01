@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Customize Website Fonts
 // @namespace    BTGS:Font
-// @version      0.9
+// @version      1.0
 // @description  Customizes website fonts to Ubuntu Nerd Font as the default sans-serif font and UbuntuMono Nerd Font as the monospace font.
 // @author       bhanutejags
 // @match        https://*/*
@@ -87,8 +87,15 @@ GM_addStyle(`
         text-rendering: optimizeLegibility;
     }
 
-    /* Universal selector for maximum coverage */
-    * {
+    /* Universal selector for maximum coverage.
+     * Icon-font elements are EXCLUDED via :not() so the site's own icon
+     * font keeps applying. We can't "restore" an icon font after clobbering
+     * it (revert/inherit would just fall back to our font via inheritance),
+     * so the only reliable fix is to never override it in the first place.
+     * The :not() chain is wrapped in :where() so it contributes ZERO
+     * specificity -- the rule stays at (0,0,0) like a bare '*', which keeps
+     * the monospace block below winning the cascade. */
+    *:where(:not([class*="icon" i]):not([class*="material-symbols"]):not([data-icon]):not(.fa):not(.fas):not(.far):not(.fal):not(.fad):not(.fab):not(.fa-solid):not(.fa-regular):not(.fa-light):not(.fa-thin):not(.fa-brands):not(.fa-duotone):not([class*="fa-"]):not(.bi):not([class^="bi-"]):not([class*=" bi-"]):not(.lucide):not([class*="lucide"]):not(.feather):not([class*="feather"]):not(.glyphicon):not(.anticon):not(.ionicon)) {
         font-family: var(--custom-sans-font) !important;
     }
 
