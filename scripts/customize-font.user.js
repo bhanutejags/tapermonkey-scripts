@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Customize Website Fonts
 // @namespace    BTGS:Font
-// @version      1.1
+// @version      1.2
 // @description  Customizes website fonts to Ubuntu Nerd Font as the default sans-serif font and UbuntuMono Nerd Font as the monospace font.
 // @author       bhanutejags
 // @match        https://*/*
@@ -72,6 +72,90 @@
  *   --custom-sans-font: 'My Font', 'Fallback Font', sans-serif;
  */
 
+/*
+ * ICON-FONT EXCLUSION
+ *
+ * Icon fonts render glyphs from Private-Use codepoints or ligatures. Forcing
+ * our font onto them shows garbage (and because a Nerd Font carries its own
+ * glyphs in those same codepoints, the icon renders as the WRONG glyph rather
+ * than blank -- easy to miss). We can't "restore" an icon font after the fact
+ * (revert/inherit just fall back to our font, and an author !important rule
+ * beats the icon's non-important inline style), so the only reliable fix is to
+ * never override these elements in the first place.
+ *
+ * This chain is wrapped in :where() at every use site, so it contributes ZERO
+ * specificity -- selectors keep their natural specificity and the cascade is
+ * unchanged. Defined once here and reused in BOTH the universal sans rule and
+ * the monospace block (icons nested inside code/editor/source containers were
+ * otherwise caught by the mono block's broad descendant selectors).
+ *
+ * Class-less icons that set the font inline are matched by attribute, e.g.
+ * Claude's design system: <span data-cds="Icon" style="font-family:
+ * var(--font-anthropicons, Anthropicons-Variable)">.
+ */
+const ICON_EXCLUDE =
+  ':not([class*="icon" i])' +
+  ':not([class*="material-symbols"])' +
+  ":not([data-icon])" +
+  ':not([data-cds="Icon"])' +
+  ':not([style*="Anthropicons" i])' +
+  ':not([style*="font-anthropicons" i])' +
+  ":not(.fa):not(.fas):not(.far):not(.fal):not(.fad):not(.fab)" +
+  ":not(.fa-solid):not(.fa-regular):not(.fa-light):not(.fa-thin):not(.fa-brands):not(.fa-duotone)" +
+  ':not([class*="fa-"])' +
+  ':not(.bi):not([class^="bi-"]):not([class*=" bi-"])' +
+  ':not(.lucide):not([class*="lucide"])' +
+  ':not(.feather):not([class*="feather"])' +
+  ":not(.glyphicon):not(.anticon):not(.ionicon)";
+
+const ICON_GUARD = `:where(${ICON_EXCLUDE})`;
+
+/* Monospace targets. Each becomes "<sel>, <sel> *" so code containers and the
+ * tokens nested inside them get the mono font -- with the icon guard appended
+ * so icon glyphs inside those containers are left alone. */
+const MONO_BASE = [
+  "pre",
+  "code",
+  "kbd",
+  "samp",
+  "tt",
+  "var",
+  ".highlight",
+  ".code",
+  ".Code",
+  ".CODE",
+  '[class*="code"]',
+  '[class*="Code"]',
+  '[class*="CODE"]',
+  '[class*="mono"]',
+  '[class*="Mono"]',
+  '[class*="MONO"]',
+  '[class*="highlight"]',
+  '[class*="Highlight"]',
+  '[class*="source"]',
+  '[class*="Source"]',
+  // GitHub-specific
+  ".blob-code",
+  ".blob-code-content",
+  ".blob-code-marker",
+  ".blob-code-inner",
+  ".react-blob-print-hide",
+  ".react-code-text",
+  ".react-code-line-contents",
+  ".react-code-line-contents-no-virtualization",
+  ".react-file-line",
+  // Editors
+  ".cm-editor",
+  ".CodeMirror",
+  '[class*="editor"]',
+  // Terminals
+  '[class*="terminal"]',
+  '[class*="console"]',
+];
+const MONO_SELECTOR = MONO_BASE.map(
+  (s) => `${s}${ICON_GUARD}, ${s} *${ICON_GUARD}`,
+).join(",\n    ");
+
 GM_addStyle(`
     /* CSS Custom Properties for easy configuration */
     :root {
@@ -87,58 +171,14 @@ GM_addStyle(`
         text-rendering: optimizeLegibility;
     }
 
-    /* Universal selector for maximum coverage.
-     * Icon-font elements are EXCLUDED via :not() so the site's own icon
-     * font keeps applying. We can't "restore" an icon font after clobbering
-     * it (revert/inherit would just fall back to our font via inheritance),
-     * so the only reliable fix is to never override it in the first place.
-     * The :not() chain is wrapped in :where() so it contributes ZERO
-     * specificity -- the rule stays at (0,0,0) like a bare '*', which keeps
-     * the monospace block below winning the cascade.
-     *
-     * Many icon fonts have no "icon" class -- they set the font inline on a
-     * generic <span> (e.g. Claude's design system: <span data-cds="Icon"
-     * style="font-family: var(--font-anthropicons, Anthropicons-Variable)">).
-     * Our '!important' beats their non-important inline style, so we must
-     * exclude them by their stable attribute (data-cds="Icon") and by the
-     * font name appearing in the inline style as a backstop. Note: a Nerd
-     * Font has its OWN glyphs in the same Private-Use codepoints, so the icon
-     * renders as the WRONG glyph rather than blank -- easy to miss. */
-    *:where(:not([class*="icon" i]):not([class*="material-symbols"]):not([data-icon]):not([data-cds="Icon"]):not([style*="Anthropicons" i]):not([style*="font-anthropicons" i]):not(.fa):not(.fas):not(.far):not(.fal):not(.fad):not(.fab):not(.fa-solid):not(.fa-regular):not(.fa-light):not(.fa-thin):not(.fa-brands):not(.fa-duotone):not([class*="fa-"]):not(.bi):not([class^="bi-"]):not([class*=" bi-"]):not(.lucide):not([class*="lucide"]):not(.feather):not([class*="feather"]):not(.glyphicon):not(.anticon):not(.ionicon)) {
+    /* Universal selector for maximum coverage (icons excluded, see ICON_EXCLUDE). */
+    *${ICON_GUARD} {
         font-family: var(--custom-sans-font) !important;
     }
 
-    /* Apply monospace font to code and technical elements */
-    /* IMPORTANT: This must come AFTER the universal selector to override it */
-    pre, pre *, code, code *, kbd, kbd *, samp, samp *, tt, tt *, var, var *,
-    .highlight, .highlight *, .code, .code *, .Code, .Code *, .CODE, .CODE *,
-    [class*="code"], [class*="code"] *,
-    [class*="Code"], [class*="Code"] *,
-    [class*="CODE"], [class*="CODE"] *,
-    [class*="mono"], [class*="mono"] *,
-    [class*="Mono"], [class*="Mono"] *,
-    [class*="MONO"], [class*="MONO"] *,
-    [class*="highlight"], [class*="highlight"] *,
-    [class*="Highlight"], [class*="Highlight"] *,
-    [class*="source"], [class*="source"] *,
-    [class*="Source"], [class*="Source"] *,
-    /* GitHub-specific selectors */
-    .blob-code, .blob-code *,
-    .blob-code-content, .blob-code-content *,
-    .blob-code-marker, .blob-code-marker *,
-    .blob-code-inner, .blob-code-inner *,
-    .react-blob-print-hide, .react-blob-print-hide *,
-    .react-code-text, .react-code-text *,
-    .react-code-line-contents, .react-code-line-contents *,
-    .react-code-line-contents-no-virtualization, .react-code-line-contents-no-virtualization *,
-    .react-file-line, .react-file-line *,
-    /* Editor-specific selectors */
-    .cm-editor, .cm-editor *,
-    .CodeMirror, .CodeMirror *,
-    [class*="editor"], [class*="editor"] *,
-    /* Terminal-like elements */
-    [class*="terminal"], [class*="terminal"] *,
-    [class*="console"], [class*="console"] * {
+    /* Apply monospace font to code and technical elements.
+     * IMPORTANT: This must come AFTER the universal selector to override it. */
+    ${MONO_SELECTOR} {
         font-family: var(--custom-mono-font) !important;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
