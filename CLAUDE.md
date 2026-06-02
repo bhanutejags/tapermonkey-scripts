@@ -81,18 +81,25 @@ the font script:
 
 Always bump `@version` and re-run the harness after edits.
 
-### Cross-browser caveat (verify in Firefox too)
+### Cross-browser: run the harness in Firefox too
 
-Playwright Chromium is a fast first pass, but it can't catch everything: sites serve different
-markup per engine. Claude.ai, for instance, renders icons as inline `<svg>` in Chrome (immune
-to `font-family`) but as an **icon font** (`Anthropicons-Variable` on `<span data-cds="Icon">`)
-in Firefox — so a font-clobbering bug was invisible in Chromium yet broke every icon in
-Firefox. When a font/CSS change could interact with icons or engine-specific rendering, also
-sanity-check the real site in Firefox. A no-DOM-access way to triage from the page's own
-console: select candidate elements, toggle the injected `<style>` (or `adoptedStyleSheets`)
-off, and compare `getComputedStyle(el).fontFamily` before/after to see what the site _intended_
-vs. what we forced. Note Violentmonkey/Tampermonkey may inject `GM_addStyle` via constructable
-`document.adoptedStyleSheets` rather than a `<style>` element, so scan both.
+Playwright drives Firefox (Gecko) as well as Chromium, so run the **same fixture through both
+engines** — `p.chromium.launch()` and `p.firefox.launch()` — and assert identical results.
+Install Firefox once with `uv run --with playwright python -m playwright install firefox`
+(Playwright ships its own unbranded Firefox matching Stable; the branded Firefox won't work).
+This catches engine-specific CSS-parsing/specificity differences (e.g. confirming
+`:where(:not(...))` and case-insensitive `[style*="..." i]` behave the same in Gecko).
+
+What a static fixture **can't** reproduce is per-engine markup: sites serve different DOM to
+different browsers. Claude.ai renders icons as inline `<svg>` in Chrome (immune to
+`font-family`) but as an **icon font** (`Anthropicons-Variable` on `<span data-cds="Icon">`) in
+Firefox — so a font-clobbering bug was invisible in Chromium yet broke every icon in Firefox.
+For that class of issue, also sanity-check the real site in Firefox. A no-DOM-access way to
+triage from the page's own console: select candidate elements, toggle the injected `<style>`
+(or `adoptedStyleSheets`) off, and compare `getComputedStyle(el).fontFamily` before/after to
+see what the site _intended_ vs. what we forced. Note Violentmonkey/Tampermonkey may inject
+`GM_addStyle` via constructable `document.adoptedStyleSheets` rather than a `<style>` element,
+so scan both.
 
 ## Modern JavaScript Syntax (Optional Build Toolchain)
 
