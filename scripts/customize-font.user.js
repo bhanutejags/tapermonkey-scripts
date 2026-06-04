@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Customize Website Fonts
 // @namespace    BTGS:Font
-// @version      1.2
+// @version      1.3
 // @description  Customizes website fonts to Ubuntu Nerd Font as the default sans-serif font and UbuntuMono Nerd Font as the monospace font.
 // @author       bhanutejags
 // @match        https://*/*
@@ -54,6 +54,8 @@
 // @exclude      *lhh.com/*
 // @exclude      *kaggle.com/*
 // @exclude      *quip-amazon.com/*
+// @exclude      *antigravity.google/*
+// @exclude      *.antigravity.google/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=github.com
 // @grant        GM_addStyle
 // ==/UserScript==
