@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Customize Website Fonts
 // @namespace    BTGS:Font
-// @version      1.3
+// @version      1.4
 // @description  Customizes website fonts to Ubuntu Nerd Font as the default sans-serif font and UbuntuMono Nerd Font as the monospace font.
 // @author       bhanutejags
 // @match        https://*/*
@@ -94,6 +94,12 @@
  * Class-less icons that set the font inline are matched by attribute, e.g.
  * Claude's design system: <span data-cds="Icon" style="font-family:
  * var(--font-anthropicons, Anthropicons-Variable)">.
+ *
+ * Icon-font libraries that set their font WITHOUT !important (e.g. PrimeIcons'
+ * `.pi { font-family: 'primeicons' }`) lose to our universal `* !important`
+ * rule, so their <i class="pi pi-copy"> ::before glyphs render as tofu. Match
+ * the library's base class (`.pi`) -- every PrimeIcon carries it, so :not(.pi)
+ * excludes them all with no false positives.
  */
 const ICON_EXCLUDE =
   ':not([class*="icon" i])' +
@@ -106,6 +112,7 @@ const ICON_EXCLUDE =
   ":not(.fa-solid):not(.fa-regular):not(.fa-light):not(.fa-thin):not(.fa-brands):not(.fa-duotone)" +
   ':not([class*="fa-"])' +
   ':not(.bi):not([class^="bi-"]):not([class*=" bi-"])' +
+  ":not(.pi)" +
   ':not(.lucide):not([class*="lucide"])' +
   ':not(.feather):not([class*="feather"])' +
   ":not(.glyphicon):not(.anticon):not(.ionicon)";
