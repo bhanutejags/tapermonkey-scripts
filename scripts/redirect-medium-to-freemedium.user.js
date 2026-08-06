@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Redirect Medium to FreeMedium
 // @namespace    https://github.com/user/tapermonkey-scripts
-// @version      1.1
+// @version      1.2
 // @description  Auto-redirect medium.com to freedium-mirror.cfd
 // @author       User
 // @match        *://medium.com/*
