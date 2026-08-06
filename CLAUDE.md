@@ -11,6 +11,10 @@ This is a collection of userscripts for browser extensions like Tampermonkey and
 - `scripts/` - Contains `.user.js` userscript files
 - Each script is standalone with a metadata header block
 
+## Rules
+
+1. **Bump `@version` on every script change**: Any edit to a `.user.js` (behavior, CSS, or metadata) must increment the `@version` field in its metadata header before committing. Never commit a script change without a version bump.
+
 ## UserScript Metadata Format
 
 Each `.user.js` file begins with a metadata block:
