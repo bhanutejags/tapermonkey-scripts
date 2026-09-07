@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Customize Website Fonts
 // @namespace    BTGS:Font
-// @version      1.6
+// @version      1.7
 // @description  Customizes website fonts to Ubuntu Nerd Font as the default sans-serif font and UbuntuMono Nerd Font as the monospace font.
 // @author       bhanutejags
 // @match        https://*/*
@@ -143,8 +143,9 @@ const MONO_BASE = [
   '[class*="MONO"]',
   '[class*="highlight"]',
   '[class*="Highlight"]',
-  '[class*="source"]',
-  '[class*="Source"]',
+  // No '[class*="source"]' / '[class*="editor"]' / '[class*="console"]':
+  // rich-text roots like Pippin's `slate-editor` match them and the whole
+  // document turns mono. Name the code editors and terminals explicitly.
   // GitHub-specific
   ".blob-code",
   ".blob-code-content",
@@ -158,10 +159,11 @@ const MONO_BASE = [
   // Editors
   ".cm-editor",
   ".CodeMirror",
-  '[class*="editor"]',
+  ".monaco-editor",
+  ".ace_editor",
   // Terminals
+  ".xterm",
   '[class*="terminal"]',
-  '[class*="console"]',
 ];
 const MONO_SELECTOR = MONO_BASE.map(
   (s) => `${s}${ICON_GUARD}, ${s} *${ICON_GUARD}`,
