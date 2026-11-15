@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Customize Website Fonts
 // @namespace    BTGS:Font
-// @version      1.7
-// @description  Customizes website fonts to Ubuntu Nerd Font as the default sans-serif font and UbuntuMono Nerd Font as the monospace font.
+// @version      1.10
+// @description  Uses UbuntuSans Nerd Font for sans-serif text and SauceCodePro Nerd Font for monospace text.
 // @author       bhanutejags
 // @match        https://*/*
 // @exclude      *.google.com/*
@@ -135,9 +135,8 @@ const MONO_BASE = [
   ".code",
   ".Code",
   ".CODE",
-  '[class*="code"]',
-  '[class*="Code"]',
-  '[class*="CODE"]',
+  '[class^="code-" i]',
+  '[class*=" code-" i]',
   '[class*="mono"]',
   '[class*="Mono"]',
   '[class*="MONO"]',
@@ -172,8 +171,8 @@ const MONO_SELECTOR = MONO_BASE.map(
 GM_addStyle(`
     /* CSS Custom Properties for easy configuration */
     :root {
-        --custom-sans-font: 'Ubuntu Nerd Font', 'Ubuntu', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-        --custom-mono-font: 'UbuntuMono Nerd Font', 'Ubuntu Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', 'Source Code Pro', monospace;
+        --custom-sans-font: 'UbuntuSans Nerd Font', 'Ubuntu Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+        --custom-mono-font: 'SauceCodePro Nerd Font', 'Source Code Pro', 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', monospace;
     }
 
     /* Apply custom sans-serif font globally */
