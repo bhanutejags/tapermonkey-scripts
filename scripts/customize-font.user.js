@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         Customize Website Fonts
 // @namespace    BTGS:Font
-// @version      1.10
+// @version      1.11
 // @description  Uses UbuntuSans Nerd Font for sans-serif text and SauceCodePro Nerd Font for monospace text.
 // @author       bhanutejags
 // @match        https://*/*
 // @exclude      *.google.com/*
+// @exclude      *fonts.google.com/*
 // @exclude      *.google.dev/*
 // @exclude      *notebooklm.google/*
 // @exclude      *.youtube.com/*
